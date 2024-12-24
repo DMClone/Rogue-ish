@@ -2,11 +2,15 @@ using System;
 using Unity.Mathematics;
 using UnityEditor.PackageManager;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
     public static PlayerController instance;
+
+    private InputAction _playerMove;
     [SerializeField] private GameObject _gun;
+    public Vector2 _moveDirection;
 
 
     public Vector3 mousePos;
@@ -18,6 +22,14 @@ public class PlayerController : MonoBehaviour
         {
             instance = this;
         }
+        _playerMove = InputSystem.actions.FindAction("Move");
+        _playerMove.performed += Move;
+        _playerMove.canceled += Move;
+    }
+
+    private void Move(InputAction.CallbackContext context)
+    {
+        _moveDirection = context.ReadValue<Vector2>();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -38,6 +50,7 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         lookingAngle = CalculateAngle(mousePos);
+        transform.position += (Vector3)_moveDirection / 10;
     }
 
     public float CalculateAngle(Vector2 ownPos)
