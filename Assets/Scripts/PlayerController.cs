@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Unity.Mathematics;
 using UnityEditor.PackageManager;
 using UnityEngine;
@@ -15,6 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject _gun;
     [SerializeField] private SpriteRenderer _spriteRenderer;
     public Vector2 _moveDirection;
+    private Coroutine _rumbleCoroutine;
 
 
     public Vector3 mousePos;
@@ -36,6 +38,8 @@ public class PlayerController : MonoBehaviour
         InputAction _playerLook = InputSystem.actions.FindAction("Look");
         _playerLook.performed += Look;
         _playerLook.canceled += Look;
+        InputAction _playerShoot = InputSystem.actions.FindAction("Shoot");
+        _playerShoot.performed += Shoot;
         _rigidbody = GetComponent<Rigidbody2D>();
         _spriteRenderer = transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>();
     }
@@ -47,12 +51,12 @@ public class PlayerController : MonoBehaviour
 
     private void Look(InputAction.CallbackContext context)
     {
-        if (_playerInput.currentControlScheme != "Keyboard")
+        if (_playerInput.currentControlScheme != "Keyboard" && context.ReadValue<Vector2>() != Vector2.zero)
         {
             lookingAngle = Vector2.Angle(Vector2.up, context.ReadValue<Vector2>());
             lookingDir = context.ReadValue<Vector2>();
         }
-        else
+        else if (context.ReadValue<Vector2>() != Vector2.zero)
         {
             lookingDir = ((Vector2)Camera.main.ScreenToWorldPoint(context.ReadValue<Vector2>()) - (Vector2)transform.position).normalized;
             lookingAngle = CalculateAngle(Camera.main.ScreenToWorldPoint(context.ReadValue<Vector2>()));
@@ -81,6 +85,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void Shoot(InputAction.CallbackContext context)
+    {
+        if (_playerInput.currentControlScheme != "Keyboard")
+        {
+            ControllerRumble(0.25f, 0.55f, 0.25f);
+        }
+    }
+
     void FixedUpdate()
     {
         _rigidbody.linearVelocity += _moveDirection;
@@ -91,5 +103,21 @@ public class PlayerController : MonoBehaviour
         Vector2 _direction = ownPos - (Vector2)transform.position;
         float _calculatedAngle = Vector2.Angle(Vector2.up, _direction);
         return _calculatedAngle;
+    }
+
+    public void ControllerRumble(float _lowFreq, float _highFreq, float _duration)
+    {
+        if (_rumbleCoroutine != null)
+        {
+            StopCoroutine(_rumbleCoroutine);
+        }
+        _rumbleCoroutine = StartCoroutine(Rumble(_lowFreq, _highFreq, _duration));
+    }
+
+    private IEnumerator Rumble(float __lowFreq, float __highFreq, float __duration)
+    {
+        Gamepad.current.SetMotorSpeeds(__lowFreq, __highFreq);
+        yield return new WaitForSeconds(__duration);
+        Gamepad.current.SetMotorSpeeds(0, 0);
     }
 }
