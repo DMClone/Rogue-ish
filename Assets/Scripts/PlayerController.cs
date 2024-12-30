@@ -17,9 +17,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private SpriteRenderer _spriteRenderer;
     private Animator _animator;
     public Vector2 _moveDirection;
+    private Coroutine _shootingCoroutine;
     private Coroutine _rumbleCoroutine;
 
-
+    public bool isFireHeld;
     public Vector3 mousePos;
     public float lookingAngle;
     public Vector2 lookingDir;
@@ -42,6 +43,7 @@ public class PlayerController : MonoBehaviour
         _playerLook.canceled += Look;
         InputAction _playerShoot = InputSystem.actions.FindAction("Shoot");
         _playerShoot.performed += Shoot;
+        _playerShoot.canceled += ShootRelease;
         _rigidbody = GetComponent<Rigidbody2D>();
         _spriteRenderer = transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>();
     }
@@ -88,15 +90,44 @@ public class PlayerController : MonoBehaviour
 
     private void Shoot(InputAction.CallbackContext context)
     {
+        isFireHeld = true;
+        if (_shootingCoroutine == null)
+        {
+            _shootingCoroutine = StartCoroutine(Shooting());
+        }
+    }
+
+    private void ShootRelease(InputAction.CallbackContext context)
+    {
+        isFireHeld = false;
+    }
+
+    private void FireShot()
+    {
         if (_playerInput.currentControlScheme != "Keyboard")
         {
             ControllerRumble(0.25f, 0.55f, 0.25f);
         }
     }
 
+    private IEnumerator Shooting()
+    {
+        FireShot();
+        yield return new WaitForSeconds(.25f);
+        if (isFireHeld)
+        {
+            _shootingCoroutine = StartCoroutine(Shooting());
+        }
+        else
+        {
+            _shootingCoroutine = null;
+        }
+    }
+
     void FixedUpdate()
     {
         _rigidbody.linearVelocity += _moveDirection;
+        Debug.Log(_shootingCoroutine);
     }
 
     void Update()
@@ -126,19 +157,19 @@ public class PlayerController : MonoBehaviour
         return _calculatedAngle;
     }
 
-    public void ControllerRumble(float _lowFreq, float _highFreq, float _duration)
+    public void ControllerRumble(float lowFreq, float highFreq, float duration)
     {
         if (_rumbleCoroutine != null)
         {
             StopCoroutine(_rumbleCoroutine);
         }
-        _rumbleCoroutine = StartCoroutine(Rumble(_lowFreq, _highFreq, _duration));
+        _rumbleCoroutine = StartCoroutine(Rumble(lowFreq, highFreq, duration));
     }
 
-    private IEnumerator Rumble(float __lowFreq, float __highFreq, float __duration)
+    private IEnumerator Rumble(float lowFreq, float highFreq, float duration)
     {
-        Gamepad.current.SetMotorSpeeds(__lowFreq, __highFreq);
-        yield return new WaitForSeconds(__duration);
+        Gamepad.current.SetMotorSpeeds(lowFreq, highFreq);
+        yield return new WaitForSeconds(duration);
         Gamepad.current.SetMotorSpeeds(0, 0);
     }
 }

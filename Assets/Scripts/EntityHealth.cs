@@ -11,9 +11,9 @@ public class EntityHealth : MonoBehaviour
         health = maxHealth;
     }
 
-    public void TakeDamage(int _damage)
+    public void TakeDamage(int damage)
     {
-        health -= _damage;
+        health -= damage;
 
         if (health <= 0)
         {
