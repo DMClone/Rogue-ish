@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D _rigidbody;
     [SerializeField] private GameObject _gun;
     [SerializeField] private SpriteRenderer _spriteRenderer;
+    private Animator _animator;
     public Vector2 _moveDirection;
     private Coroutine _rumbleCoroutine;
 
@@ -31,10 +32,11 @@ public class PlayerController : MonoBehaviour
         }
 
         _playerInput = GetComponent<PlayerInput>();
+        _animator = transform.GetChild(1).GetComponent<Animator>();
 
         InputAction _playerMove = InputSystem.actions.FindAction("Move");
         _playerMove.performed += Move;
-        _playerMove.canceled += Move;
+        _playerMove.canceled += MoveStop;
         InputAction _playerLook = InputSystem.actions.FindAction("Look");
         _playerLook.performed += Look;
         _playerLook.canceled += Look;
@@ -47,6 +49,13 @@ public class PlayerController : MonoBehaviour
     private void Move(InputAction.CallbackContext context)
     {
         _moveDirection = context.ReadValue<Vector2>();
+        // _animator.ResetTrigger("Todefault");
+    }
+
+    private void MoveStop(InputAction.CallbackContext context)
+    {
+        _moveDirection = context.ReadValue<Vector2>();
+        // _animator.ResetTrigger("Run");
     }
 
     private void Look(InputAction.CallbackContext context)
@@ -75,14 +84,6 @@ public class PlayerController : MonoBehaviour
             _gun.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().flipY = false;
             _gun.transform.GetChild(0).gameObject.transform.localPosition = new Vector3(-0.1f, 0, 0);
         }
-        if (_moveDirection.x < 0)
-        {
-            _spriteRenderer.flipX = true;
-        }
-        else
-        {
-            _spriteRenderer.flipX = false;
-        }
     }
 
     private void Shoot(InputAction.CallbackContext context)
@@ -96,6 +97,26 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         _rigidbody.linearVelocity += _moveDirection;
+    }
+
+    void Update()
+    {
+        if (_rigidbody.linearVelocity.magnitude >= 0.4f)
+        {
+            _animator.SetTrigger("Run");
+        }
+        else
+        {
+            _animator.SetTrigger("ToDefault");
+        }
+        if (_moveDirection.x < 0)
+        {
+            _spriteRenderer.flipX = true;
+        }
+        else
+        {
+            _spriteRenderer.flipX = false;
+        }
     }
 
     public float CalculateAngle(Vector2 ownPos)
