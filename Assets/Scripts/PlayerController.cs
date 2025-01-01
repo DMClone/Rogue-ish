@@ -69,22 +69,21 @@ public class PlayerController : MonoBehaviour
         }
         else if (context.ReadValue<Vector2>() != Vector2.zero)
         {
-            lookingDir = ((Vector2)Camera.main.ScreenToWorldPoint(context.ReadValue<Vector2>()) - (Vector2)transform.position).normalized;
+            lookingDir = ((Vector2)Camera.main.ScreenToWorldPoint(context.ReadValue<Vector2>()) - (Vector2)_gun.transform.position).normalized;
             lookingAngle = CalculateAngle(Camera.main.ScreenToWorldPoint(context.ReadValue<Vector2>()));
         }
 
         _gun.transform.up = lookingDir;
+        Debug.Log((Vector2)_gun.transform.localPosition);
         _gun.transform.eulerAngles = new Vector3(_gun.transform.eulerAngles.x, 0, _gun.transform.eulerAngles.z);
 
         if (_gun.transform.eulerAngles.z > 0 && _gun.transform.eulerAngles.z < 180)
         {
-            _gun.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().flipY = true;
-            _gun.transform.GetChild(0).gameObject.transform.localPosition = new Vector3(0.1f, 0, 0);
+            _gun.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().flipY = true; ;
         }
         else
         {
             _gun.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().flipY = false;
-            _gun.transform.GetChild(0).gameObject.transform.localPosition = new Vector3(-0.1f, 0, 0);
         }
     }
 
@@ -127,7 +126,6 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         _rigidbody.linearVelocity += _moveDirection;
-        Debug.Log(_shootingCoroutine);
     }
 
     void Update()
