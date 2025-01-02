@@ -103,6 +103,7 @@ public class PlayerController : MonoBehaviour
 
     private void FireShot()
     {
+        Camera.main.GetComponent<CameraShake>().ShakeScreen(0.225f);
         if (_playerInput.currentControlScheme != "Keyboard")
         {
             ControllerRumble(0.25f, 0.55f, 0.25f);
