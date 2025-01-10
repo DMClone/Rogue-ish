@@ -21,7 +21,6 @@ public class PlayerController : MonoBehaviour
     private Coroutine _rumbleCoroutine;
 
     public bool isFireHeld;
-    public Vector3 mousePos;
     public float lookingAngle;
     public Vector2 lookingDir;
 
