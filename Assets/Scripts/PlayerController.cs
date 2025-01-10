@@ -73,12 +73,11 @@ public class PlayerController : MonoBehaviour
         }
 
         _gun.transform.up = lookingDir;
-        Debug.Log((Vector2)_gun.transform.localPosition);
         _gun.transform.eulerAngles = new Vector3(_gun.transform.eulerAngles.x, 0, _gun.transform.eulerAngles.z);
 
         if (_gun.transform.eulerAngles.z > 0 && _gun.transform.eulerAngles.z < 180)
         {
-            _gun.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().flipY = true; ;
+            _gun.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().flipY = true;
         }
         else
         {
@@ -102,7 +101,7 @@ public class PlayerController : MonoBehaviour
 
     private void FireShot()
     {
-        Camera.main.GetComponent<CameraShake>().ShakeScreen(0.225f);
+        Camera.main.GetComponent<CameraShake>().ShakeScreen(0.2f);
         if (_playerInput.currentControlScheme != "Keyboard")
         {
             ControllerRumble(0.25f, 0.55f, 0.25f);
@@ -138,7 +137,7 @@ public class PlayerController : MonoBehaviour
         {
             _animator.SetTrigger("ToDefault");
         }
-        if (_moveDirection.x < 0)
+        if (_rigidbody.linearVelocityX < 0)
         {
             _spriteRenderer.flipX = true;
         }

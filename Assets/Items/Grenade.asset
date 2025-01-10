@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7d6d09280c1ead4996658909c08295f, type: 3}
   m_Name: Grenade
   m_EditorClassIdentifier: 
-  image: {fileID: 0}
+  image: {fileID: -201829820, guid: d71a3dc7aa20fad4f9a99fc76a9254ba, type: 3}
   isStackable: 1
   isUsable: 1
-  useType: 0
-  explosionRadius: 0
+  useType: 1
+  explosionRadius: 5

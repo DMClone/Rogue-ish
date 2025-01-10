@@ -4,4 +4,6 @@ using UnityEngine;
 public class Gun : Item
 {
     public float fireRate;
+    public int bulletsPerShot;
+    public int damagePetBullet;
 }

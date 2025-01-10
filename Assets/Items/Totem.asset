@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6159ec8a2ad11d849909ab36f2ee5506, type: 3}
   m_Name: Totem
   m_EditorClassIdentifier: 
-  image: {fileID: 0}
-  isStackable: 1
-  isUsable: 1
+  image: {fileID: -1002307068, guid: d71a3dc7aa20fad4f9a99fc76a9254ba, type: 3}
+  isStackable: 0
+  isUsable: 0
   useType: 0
