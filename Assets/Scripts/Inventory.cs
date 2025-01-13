@@ -1,27 +1,41 @@
 using System.Collections;
 using Microsoft.Unity.VisualStudio.Editor;
+using Unity.VisualScripting.ReorderableList;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
+    public static Inventory instance;
+
     [SerializeField] private Sprite _slotSprite;
     public int slotSelected;
-    public int slots;
+    public InventorySlot[] inventorySlots;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+    private void Awake()
     {
-        StartCoroutine(TestSwitch());
+        if (instance == null)
+        {
+            instance = this;
+        }
     }
 
-    IEnumerator TestSwitch()
+    public void AddItem(Item item)
     {
-        yield return new WaitForSeconds(2f);
-
+        for (int i = 0; i < inventorySlots.Length; i++)
+        {
+            InventorySlot slot = inventorySlots[i];
+            InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
+            if (itemInSlot == null)
+            {
+                SpawnNewItem(item, slot);
+                return;
+            }
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    void SpawnNewItem(Item item, InventorySlot slot)
     {
 
     }
