@@ -10,7 +10,7 @@ public class Inventory : MonoBehaviour
 
     [SerializeField] private Sprite _slotSprite;
     [SerializeField] private GameObject _itemPrefab;
-    public int slotSelected;
+    public int slotSelected = 0;
     public InventorySlot[] inventorySlots;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
@@ -22,10 +22,21 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    // public bool CheckInventoryFull()
-    // {
-    //     return true;
-    // }
+    public int CheckInventorySlotSpace()
+    {
+        for (int i = 0; i < inventorySlots.Length; i++)
+        {
+            InventorySlot slot = inventorySlots[i];
+            InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
+            if (itemInSlot != null)
+            {
+                itemInSlot.count++;
+                itemInSlot.UpdateCount();
+                return i;
+            }
+        }
+        return 1;
+    }
 
     public bool AddItem(Item item)
     {

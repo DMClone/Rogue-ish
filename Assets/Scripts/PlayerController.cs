@@ -3,6 +3,7 @@ using System.Collections;
 using Unity.Mathematics;
 using UnityEditor.PackageManager;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.Assertions.Must;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
@@ -43,6 +44,10 @@ public class PlayerController : MonoBehaviour
         InputAction _playerShoot = InputSystem.actions.FindAction("Shoot");
         _playerShoot.performed += Shoot;
         _playerShoot.canceled += ShootRelease;
+        InputAction _playerSwitchL = InputSystem.actions.FindAction("SwitchLeft");
+        _playerSwitchL.performed += SwitchL;
+        InputAction _playerSwitchR = InputSystem.actions.FindAction("SwitchRight");
+        _playerSwitchR.performed += SwitchR;
         _rigidbody = GetComponent<Rigidbody2D>();
         _spriteRenderer = transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>();
     }
@@ -120,6 +125,16 @@ public class PlayerController : MonoBehaviour
         {
             _shootingCoroutine = null;
         }
+    }
+
+    private void SwitchL(InputAction.CallbackContext context)
+    {
+        Debug.Log("Went to the left");
+    }
+
+    private void SwitchR(InputAction.CallbackContext context)
+    {
+        Debug.Log("Went to the right");
     }
 
     void FixedUpdate()

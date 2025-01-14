@@ -55,13 +55,22 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""SwitchInventorySlot"",
-                    ""type"": ""Value"",
+                    ""name"": ""SwitchLeft"",
+                    ""type"": ""Button"",
                     ""id"": ""50488c35-832c-46f5-aaea-fb1eed506fb2"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": true
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwitchRight"",
+                    ""type"": ""Button"",
+                    ""id"": ""b99a514d-4311-4793-81d1-b88aa40ef405"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -220,37 +229,48 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""1D Axis"",
-                    ""id"": ""5a4703df-523f-44a8-b8d1-00b59a342a21"",
-                    ""path"": ""1DAxis"",
+                    ""name"": """",
+                    ""id"": ""95eb0d1b-7578-4d41-999d-7e5d2446751e"",
+                    ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""SwitchInventorySlot"",
-                    ""isComposite"": true,
+                    ""groups"": "";Keyboard"",
+                    ""action"": ""SwitchLeft"",
+                    ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""Negative"",
-                    ""id"": ""82daf154-8631-4d94-b79f-de77d34b3578"",
-                    ""path"": ""<Mouse>/scroll/up"",
+                    ""name"": """",
+                    ""id"": ""5b33a339-c185-472c-9a6a-b57f0267f4f8"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""SwitchInventorySlot"",
+                    ""groups"": "";Controller"",
+                    ""action"": ""SwitchLeft"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": true
+                    ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""Positive"",
-                    ""id"": ""1a26963a-2fd1-461e-871d-32aa4557c7d0"",
-                    ""path"": ""<Mouse>/scroll/down"",
+                    ""name"": """",
+                    ""id"": ""30cf445c-8dc3-4fa2-8cc7-fe4de0ce8cc2"",
+                    ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""SwitchInventorySlot"",
+                    ""groups"": "";Keyboard"",
+                    ""action"": ""SwitchRight"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": true
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""da2db720-2fa0-46db-9d68-1ab42d267acb"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Controller"",
+                    ""action"": ""SwitchRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -295,7 +315,8 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Shoot = m_Player.FindAction("Shoot", throwIfNotFound: true);
-        m_Player_SwitchInventorySlot = m_Player.FindAction("SwitchInventorySlot", throwIfNotFound: true);
+        m_Player_SwitchLeft = m_Player.FindAction("SwitchLeft", throwIfNotFound: true);
+        m_Player_SwitchRight = m_Player.FindAction("SwitchRight", throwIfNotFound: true);
     }
 
     ~@PlayerInputs()
@@ -365,7 +386,8 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Shoot;
-    private readonly InputAction m_Player_SwitchInventorySlot;
+    private readonly InputAction m_Player_SwitchLeft;
+    private readonly InputAction m_Player_SwitchRight;
     public struct PlayerActions
     {
         private @PlayerInputs m_Wrapper;
@@ -373,7 +395,8 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @Shoot => m_Wrapper.m_Player_Shoot;
-        public InputAction @SwitchInventorySlot => m_Wrapper.m_Player_SwitchInventorySlot;
+        public InputAction @SwitchLeft => m_Wrapper.m_Player_SwitchLeft;
+        public InputAction @SwitchRight => m_Wrapper.m_Player_SwitchRight;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -392,9 +415,12 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Shoot.started += instance.OnShoot;
             @Shoot.performed += instance.OnShoot;
             @Shoot.canceled += instance.OnShoot;
-            @SwitchInventorySlot.started += instance.OnSwitchInventorySlot;
-            @SwitchInventorySlot.performed += instance.OnSwitchInventorySlot;
-            @SwitchInventorySlot.canceled += instance.OnSwitchInventorySlot;
+            @SwitchLeft.started += instance.OnSwitchLeft;
+            @SwitchLeft.performed += instance.OnSwitchLeft;
+            @SwitchLeft.canceled += instance.OnSwitchLeft;
+            @SwitchRight.started += instance.OnSwitchRight;
+            @SwitchRight.performed += instance.OnSwitchRight;
+            @SwitchRight.canceled += instance.OnSwitchRight;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -408,9 +434,12 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Shoot.started -= instance.OnShoot;
             @Shoot.performed -= instance.OnShoot;
             @Shoot.canceled -= instance.OnShoot;
-            @SwitchInventorySlot.started -= instance.OnSwitchInventorySlot;
-            @SwitchInventorySlot.performed -= instance.OnSwitchInventorySlot;
-            @SwitchInventorySlot.canceled -= instance.OnSwitchInventorySlot;
+            @SwitchLeft.started -= instance.OnSwitchLeft;
+            @SwitchLeft.performed -= instance.OnSwitchLeft;
+            @SwitchLeft.canceled -= instance.OnSwitchLeft;
+            @SwitchRight.started -= instance.OnSwitchRight;
+            @SwitchRight.performed -= instance.OnSwitchRight;
+            @SwitchRight.canceled -= instance.OnSwitchRight;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -451,6 +480,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
         void OnShoot(InputAction.CallbackContext context);
-        void OnSwitchInventorySlot(InputAction.CallbackContext context);
+        void OnSwitchLeft(InputAction.CallbackContext context);
+        void OnSwitchRight(InputAction.CallbackContext context);
     }
 }
