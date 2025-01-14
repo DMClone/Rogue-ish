@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccc48a29678aeb542abf570d589aeff1, type: 3}
   m_Name: Shotgun
   m_EditorClassIdentifier: 
-  image: {fileID: 0}
+  image: {fileID: -762074860, guid: d71a3dc7aa20fad4f9a99fc76a9254ba, type: 3}
   isStackable: 0
   isUsable: 1
   useType: 0

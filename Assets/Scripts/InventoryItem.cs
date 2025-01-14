@@ -6,14 +6,38 @@ using UnityEngine.UI;
 public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public Image image;
-    [HideInInspector] public Transform parentAfterDrag;
-    [HideInInspector] public Item item;
+    public Text countText;
 
+
+    public Transform parentAfterDrag;
+    [HideInInspector] public Item item;
+    public int count = 1;
+
+    private void Start()
+    {
+        parentAfterDrag = transform.parent;
+        UpdateCount();
+    }
 
     public void InitialiseItem(Item newItem)
     {
         item = newItem;
         image.sprite = newItem.image;
+        UpdateCount();
+    }
+
+    public void UpdateCount()
+    {
+        if (count > 1)
+        {
+            countText.text = count.ToString();
+            countText.gameObject.SetActive(true);
+        }
+        else
+        {
+            countText.gameObject.SetActive(false);
+        }
+
     }
 
     public void OnBeginDrag(PointerEventData eventData)

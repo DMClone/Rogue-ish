@@ -9,14 +9,14 @@ public class DroppedItem : MonoBehaviour
 
     private void Update()
     {
-        transform.eulerAngles += new Vector3(0, 1, 0) * 0.4f;
+        transform.eulerAngles += new Vector3(0, 1, 0) * 150 * Time.deltaTime;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.GetComponent<PlayerController>() != null)
+        if ((other.GetComponent<PlayerController>() != null) && Inventory.instance.AddItem(item) != false)
         {
-            Debug.Log("picked Item up");
+            Destroy(gameObject);
         }
     }
 }
