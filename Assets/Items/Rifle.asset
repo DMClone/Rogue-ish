@@ -15,5 +15,7 @@ MonoBehaviour:
   image: {fileID: 563336626, guid: d71a3dc7aa20fad4f9a99fc76a9254ba, type: 3}
   isStackable: 0
   isUsable: 1
+  useTime: 0.4
   useType: 0
-  fireRate: 1
+  bulletsPerShot: 0
+  damagePetBullet: 0

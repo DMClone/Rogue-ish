@@ -9,6 +9,7 @@ public class Item : ScriptableObject
     [Header("Gameplay")]
     public bool isStackable = true;
     public bool isUsable = true;
+    [Range(0, 2)] public float useTime = 0f;
     public UseType useType;
 }
 
