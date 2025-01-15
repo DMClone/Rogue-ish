@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     public static PlayerController instance;
 
     private Inventory _inventory;
+    [SerializeField] private GameObject _droppedItem;
     private PlayerInput _playerInput;
     private Rigidbody2D _rigidbody;
     [SerializeField] private GameObject _gun;
@@ -37,6 +38,7 @@ public class PlayerController : MonoBehaviour
         _playerInput = GetComponent<PlayerInput>();
         _animator = transform.GetChild(1).GetComponent<Animator>();
 
+        #region Inputs
         InputAction _playerMove = InputSystem.actions.FindAction("Move");
         _playerMove.performed += Move;
         _playerMove.canceled += MoveStop;
@@ -50,6 +52,10 @@ public class PlayerController : MonoBehaviour
         _playerSwitchL.performed += SwitchL;
         InputAction _playerSwitchR = InputSystem.actions.FindAction("SwitchRight");
         _playerSwitchR.performed += SwitchR;
+        InputAction _playerDrop = InputSystem.actions.FindAction("Drop");
+        _playerDrop.performed += Drop;
+        #endregion
+
         _rigidbody = GetComponent<Rigidbody2D>();
         _spriteRenderer = transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>();
     }
@@ -162,6 +168,19 @@ public class PlayerController : MonoBehaviour
         _inventory.UpdateSelectPos();
     }
     #endregion
+
+    private void Drop(InputAction.CallbackContext context)
+    {
+        InventorySlot slot = _inventory.inventorySlots[_inventory.slotSelected];
+        InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
+        if ((itemInSlot != null) && !itemInSlot.item.isStackable)
+        {
+            GameObject droppedItem = Instantiate(_droppedItem, transform.position, Quaternion.identity);
+            droppedItem.GetComponent<DroppedItem>().item = itemInSlot.item;
+            droppedItem.GetComponent<Rigidbody2D>().linearVelocity = lookingDir * 5;
+            Destroy(itemInSlot.gameObject);
+        }
+    }
 
     void FixedUpdate()
     {

@@ -1,12 +1,11 @@
 using UnityEngine;
 
-[RequireComponent(typeof(SpriteRenderer), typeof(BoxCollider2D))]
+[RequireComponent(typeof(BoxCollider2D))]
 public class DroppedItem : MonoBehaviour
 {
-    [SerializeField] SpriteRenderer spriteRenderer;
-
-    public Item item;
     [SerializeField] private SpriteRenderer _spriteRenderer;
+    public Item item;
+    public bool _isPlayerInCollider = true;
 
     private void Start()
     {
@@ -16,13 +15,19 @@ public class DroppedItem : MonoBehaviour
 
     private void Update()
     {
-        transform.eulerAngles += new Vector3(0, 1, 0) * 150 * Time.deltaTime;
+        transform.GetChild(0).transform.eulerAngles += new Vector3(0, 1, 0) * 150 * Time.deltaTime;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if ((other.GetComponent<PlayerController>() != null) && Inventory.instance.AddItem(item) != false)
+        if ((other.GetComponent<PlayerController>() != null) && !_isPlayerInCollider && Inventory.instance.AddItem(item) != false)
             Destroy(gameObject);
 
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.GetComponent<PlayerController>() != null)
+            _isPlayerInCollider = false;
     }
 }

@@ -8,9 +8,8 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public Image image;
     public Text countText;
 
-
     public Transform parentAfterDrag;
-    [HideInInspector] public Item item;
+    public Item item;
     public int count = 1;
 
     private void Start()
