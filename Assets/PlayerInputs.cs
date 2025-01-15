@@ -71,6 +71,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Drop"",
+                    ""type"": ""Button"",
+                    ""id"": ""d8e16757-bc25-445c-b4b8-5d82069c0876"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -271,6 +280,28 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""action"": ""SwitchRight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d93b88b2-3a4f-43e7-b91f-12abb3adbd8e"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard"",
+                    ""action"": ""Drop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""321f858f-7ba3-4a12-97b0-beb03c7d18ac"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Controller"",
+                    ""action"": ""Drop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -317,6 +348,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Player_Shoot = m_Player.FindAction("Shoot", throwIfNotFound: true);
         m_Player_SwitchLeft = m_Player.FindAction("SwitchLeft", throwIfNotFound: true);
         m_Player_SwitchRight = m_Player.FindAction("SwitchRight", throwIfNotFound: true);
+        m_Player_Drop = m_Player.FindAction("Drop", throwIfNotFound: true);
     }
 
     ~@PlayerInputs()
@@ -388,6 +420,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Shoot;
     private readonly InputAction m_Player_SwitchLeft;
     private readonly InputAction m_Player_SwitchRight;
+    private readonly InputAction m_Player_Drop;
     public struct PlayerActions
     {
         private @PlayerInputs m_Wrapper;
@@ -397,6 +430,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         public InputAction @Shoot => m_Wrapper.m_Player_Shoot;
         public InputAction @SwitchLeft => m_Wrapper.m_Player_SwitchLeft;
         public InputAction @SwitchRight => m_Wrapper.m_Player_SwitchRight;
+        public InputAction @Drop => m_Wrapper.m_Player_Drop;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -421,6 +455,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @SwitchRight.started += instance.OnSwitchRight;
             @SwitchRight.performed += instance.OnSwitchRight;
             @SwitchRight.canceled += instance.OnSwitchRight;
+            @Drop.started += instance.OnDrop;
+            @Drop.performed += instance.OnDrop;
+            @Drop.canceled += instance.OnDrop;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -440,6 +477,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @SwitchRight.started -= instance.OnSwitchRight;
             @SwitchRight.performed -= instance.OnSwitchRight;
             @SwitchRight.canceled -= instance.OnSwitchRight;
+            @Drop.started -= instance.OnDrop;
+            @Drop.performed -= instance.OnDrop;
+            @Drop.canceled -= instance.OnDrop;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -482,5 +522,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         void OnShoot(InputAction.CallbackContext context);
         void OnSwitchLeft(InputAction.CallbackContext context);
         void OnSwitchRight(InputAction.CallbackContext context);
+        void OnDrop(InputAction.CallbackContext context);
     }
 }

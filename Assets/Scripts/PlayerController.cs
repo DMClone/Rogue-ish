@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
 {
     public static PlayerController instance;
 
+    private Inventory _inventory;
     private PlayerInput _playerInput;
     private Rigidbody2D _rigidbody;
     [SerializeField] private GameObject _gun;
@@ -32,6 +33,7 @@ public class PlayerController : MonoBehaviour
             instance = this;
         }
 
+        _inventory = Inventory.instance;
         _playerInput = GetComponent<PlayerInput>();
         _animator = transform.GetChild(1).GetComponent<Animator>();
 
@@ -52,6 +54,7 @@ public class PlayerController : MonoBehaviour
         _spriteRenderer = transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>();
     }
 
+    #region Move/Look
     private void Move(InputAction.CallbackContext context)
     {
         _moveDirection = context.ReadValue<Vector2>();
@@ -89,7 +92,9 @@ public class PlayerController : MonoBehaviour
             _gun.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().flipY = false;
         }
     }
+    #endregion
 
+    #region Shooting
     private void Shoot(InputAction.CallbackContext context)
     {
         isFireHeld = true;
@@ -126,16 +131,37 @@ public class PlayerController : MonoBehaviour
             _shootingCoroutine = null;
         }
     }
+    #endregion
 
+    #region Switching
     private void SwitchL(InputAction.CallbackContext context)
     {
         Debug.Log("Went to the left");
+        if (_inventory.slotSelected > 0)
+        {
+            _inventory.slotSelected--;
+        }
+        else
+        {
+            _inventory.slotSelected = _inventory.inventorySlots.Length - 1;
+        }
+        _inventory.UpdateSelectPos();
     }
 
     private void SwitchR(InputAction.CallbackContext context)
     {
         Debug.Log("Went to the right");
+        if (_inventory.slotSelected < _inventory.inventorySlots.Length - 1)
+        {
+            _inventory.slotSelected++;
+        }
+        else
+        {
+            _inventory.slotSelected = 0;
+        }
+        _inventory.UpdateSelectPos();
     }
+    #endregion
 
     void FixedUpdate()
     {
