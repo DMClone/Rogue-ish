@@ -46,7 +46,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Shoot"",
+                    ""name"": ""Use"",
                     ""type"": ""Button"",
                     ""id"": ""f796716e-bb8d-4ff7-bf7c-b422371fb494"",
                     ""expectedControlType"": """",
@@ -200,7 +200,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""Shoot"",
+                    ""action"": ""Use"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -211,7 +211,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Controller"",
-                    ""action"": ""Shoot"",
+                    ""action"": ""Use"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -345,7 +345,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
-        m_Player_Shoot = m_Player.FindAction("Shoot", throwIfNotFound: true);
+        m_Player_Use = m_Player.FindAction("Use", throwIfNotFound: true);
         m_Player_SwitchLeft = m_Player.FindAction("SwitchLeft", throwIfNotFound: true);
         m_Player_SwitchRight = m_Player.FindAction("SwitchRight", throwIfNotFound: true);
         m_Player_Drop = m_Player.FindAction("Drop", throwIfNotFound: true);
@@ -417,7 +417,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Look;
-    private readonly InputAction m_Player_Shoot;
+    private readonly InputAction m_Player_Use;
     private readonly InputAction m_Player_SwitchLeft;
     private readonly InputAction m_Player_SwitchRight;
     private readonly InputAction m_Player_Drop;
@@ -427,7 +427,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         public PlayerActions(@PlayerInputs wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Look => m_Wrapper.m_Player_Look;
-        public InputAction @Shoot => m_Wrapper.m_Player_Shoot;
+        public InputAction @Use => m_Wrapper.m_Player_Use;
         public InputAction @SwitchLeft => m_Wrapper.m_Player_SwitchLeft;
         public InputAction @SwitchRight => m_Wrapper.m_Player_SwitchRight;
         public InputAction @Drop => m_Wrapper.m_Player_Drop;
@@ -446,9 +446,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Look.started += instance.OnLook;
             @Look.performed += instance.OnLook;
             @Look.canceled += instance.OnLook;
-            @Shoot.started += instance.OnShoot;
-            @Shoot.performed += instance.OnShoot;
-            @Shoot.canceled += instance.OnShoot;
+            @Use.started += instance.OnUse;
+            @Use.performed += instance.OnUse;
+            @Use.canceled += instance.OnUse;
             @SwitchLeft.started += instance.OnSwitchLeft;
             @SwitchLeft.performed += instance.OnSwitchLeft;
             @SwitchLeft.canceled += instance.OnSwitchLeft;
@@ -468,9 +468,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Look.started -= instance.OnLook;
             @Look.performed -= instance.OnLook;
             @Look.canceled -= instance.OnLook;
-            @Shoot.started -= instance.OnShoot;
-            @Shoot.performed -= instance.OnShoot;
-            @Shoot.canceled -= instance.OnShoot;
+            @Use.started -= instance.OnUse;
+            @Use.performed -= instance.OnUse;
+            @Use.canceled -= instance.OnUse;
             @SwitchLeft.started -= instance.OnSwitchLeft;
             @SwitchLeft.performed -= instance.OnSwitchLeft;
             @SwitchLeft.canceled -= instance.OnSwitchLeft;
@@ -519,7 +519,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     {
         void OnMove(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
-        void OnShoot(InputAction.CallbackContext context);
+        void OnUse(InputAction.CallbackContext context);
         void OnSwitchLeft(InputAction.CallbackContext context);
         void OnSwitchRight(InputAction.CallbackContext context);
         void OnDrop(InputAction.CallbackContext context);

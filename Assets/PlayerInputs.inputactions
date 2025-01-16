@@ -24,7 +24,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Shoot",
+                    "name": "Use",
                     "type": "Button",
                     "id": "f796716e-bb8d-4ff7-bf7c-b422371fb494",
                     "expectedControlType": "",
@@ -178,7 +178,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard",
-                    "action": "Shoot",
+                    "action": "Use",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -189,7 +189,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Controller",
-                    "action": "Shoot",
+                    "action": "Use",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

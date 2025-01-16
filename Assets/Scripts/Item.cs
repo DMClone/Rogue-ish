@@ -1,16 +1,14 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Scriptable Object/Item")]
+[CreateAssetMenu(menuName = "Items/Item")]
 public class Item : ScriptableObject
 {
     [Header("Image")]
     public Sprite image;
 
-    [Header("Gameplay")]
+    [Header("Main")]
     public bool isStackable = true;
     public bool isUsable = true;
-    [Range(0, 2)] public float useTime = 0f;
-    public UseType useType;
 }
 
 public enum UseType

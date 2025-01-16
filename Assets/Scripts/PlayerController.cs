@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private SpriteRenderer _spriteRenderer;
     private Animator _animator;
     public Vector2 _moveDirection;
-    private Coroutine _shootingCoroutine;
+    private Coroutine _usingCoroutine;
     private Coroutine _rumbleCoroutine;
 
     public bool isFireHeld;
@@ -45,9 +45,9 @@ public class PlayerController : MonoBehaviour
         InputAction _playerLook = InputSystem.actions.FindAction("Look");
         _playerLook.performed += Look;
         _playerLook.canceled += Look;
-        InputAction _playerShoot = InputSystem.actions.FindAction("Shoot");
-        _playerShoot.performed += Shoot;
-        _playerShoot.canceled += ShootRelease;
+        InputAction _playerUse = InputSystem.actions.FindAction("Use");
+        _playerUse.performed += Use;
+        _playerUse.canceled += UseRelease;
         InputAction _playerSwitchL = InputSystem.actions.FindAction("SwitchLeft");
         _playerSwitchL.performed += SwitchL;
         InputAction _playerSwitchR = InputSystem.actions.FindAction("SwitchRight");
@@ -100,23 +100,36 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    #region Shooting
-    private void Shoot(InputAction.CallbackContext context)
+    #region Using
+    private void Use(InputAction.CallbackContext context)
     {
         isFireHeld = true;
-        if (_shootingCoroutine == null)
+        if (_usingCoroutine == null)
         {
-            _shootingCoroutine = StartCoroutine(Shooting());
+            _usingCoroutine = StartCoroutine(Using());
         }
     }
 
-    private void ShootRelease(InputAction.CallbackContext context)
+    private void UseRelease(InputAction.CallbackContext context)
     {
         isFireHeld = false;
     }
 
     private void FireShot()
     {
+        Item item = _inventory.inventorySlots[_inventory.slotSelected].GetComponentInChildren<InventoryItem>().item;
+        switch (item)
+        {
+            case Gun:
+                Debug.Log("Just shot a gun!");
+                break;
+            case Throwable:
+                Debug.Log("Just threw a throwable!");
+                break;
+            default:
+                break;
+        }
+
         Camera.main.GetComponent<CameraShake>().ShakeScreen(0.2f);
         if (_playerInput.currentControlScheme != "Keyboard")
         {
@@ -124,17 +137,17 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private IEnumerator Shooting()
+    private IEnumerator Using()
     {
         FireShot();
         yield return new WaitForSeconds(.25f);
         if (isFireHeld)
         {
-            _shootingCoroutine = StartCoroutine(Shooting());
+            _usingCoroutine = StartCoroutine(Using());
         }
         else
         {
-            _shootingCoroutine = null;
+            _usingCoroutine = null;
         }
     }
     #endregion
@@ -142,7 +155,6 @@ public class PlayerController : MonoBehaviour
     #region Switching
     private void SwitchL(InputAction.CallbackContext context)
     {
-        Debug.Log("Went to the left");
         if (_inventory.slotSelected > 0)
         {
             _inventory.slotSelected--;
@@ -156,7 +168,6 @@ public class PlayerController : MonoBehaviour
 
     private void SwitchR(InputAction.CallbackContext context)
     {
-        Debug.Log("Went to the right");
         if (_inventory.slotSelected < _inventory.inventorySlots.Length - 1)
         {
             _inventory.slotSelected++;
