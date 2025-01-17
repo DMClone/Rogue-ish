@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ccc48a29678aeb542abf570d589aeff1, type: 3}
-  m_Name: Rifle
+  m_Name: Flintlock
   m_EditorClassIdentifier: 
-  image: {fileID: 563336626, guid: d71a3dc7aa20fad4f9a99fc76a9254ba, type: 3}
-  inGameImage: {fileID: -144335857, guid: 0d5e657ee5a074e4baa53d5b248a01d2, type: 3}
+  image: {fileID: -205726582, guid: d71a3dc7aa20fad4f9a99fc76a9254ba, type: 3}
+  inGameImage: {fileID: -353751291, guid: 0d5e657ee5a074e4baa53d5b248a01d2, type: 3}
   isStackable: 0
   isUsable: 1
-  gunSound: {fileID: 8300000, guid: 6f0c572d865b4664db7a460972bc4768, type: 3}
+  gunSound: {fileID: 0}
   useType: 0
   bulletsPerShot: 1
   damagePetBullet: 5
-  fireRate: 0.25
+  fireRate: 1

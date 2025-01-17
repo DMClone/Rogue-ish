@@ -5,6 +5,7 @@ public class Item : ScriptableObject
 {
     [Header("Image")]
     public Sprite image;
+    public Sprite inGameImage;
 
     [Header("Main")]
     public bool isStackable = true;

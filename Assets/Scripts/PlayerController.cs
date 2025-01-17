@@ -1,22 +1,24 @@
 using System;
 using System.Collections;
+using NUnit.Framework.Constraints;
 using Unity.Mathematics;
 using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Animations;
-using UnityEngine.Assertions.Must;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IShoot
 {
     public static PlayerController instance;
 
     private Inventory _inventory;
     [SerializeField] private GameObject _droppedItem;
+    public GameObject _bulletPrefab { get; set; }
+    private InventoryItem _inventoryItem;
     private PlayerInput _playerInput;
     private Rigidbody2D _rigidbody;
-    [SerializeField] private GameObject _gun;
+    [SerializeField] private GameObject _arm;
     [SerializeField] private SpriteRenderer _spriteRenderer;
     private Animator _animator;
     public Vector2 _moveDirection;
@@ -24,6 +26,7 @@ public class PlayerController : MonoBehaviour
     private Coroutine _rumbleCoroutine;
 
     public bool isFireHeld;
+    [SerializeField] private float useCooldown;
     public float lookingAngle;
     public Vector2 lookingDir;
 
@@ -82,20 +85,20 @@ public class PlayerController : MonoBehaviour
         }
         else if (context.ReadValue<Vector2>() != Vector2.zero)
         {
-            lookingDir = ((Vector2)Camera.main.ScreenToWorldPoint(context.ReadValue<Vector2>()) - (Vector2)_gun.transform.position).normalized;
+            lookingDir = ((Vector2)Camera.main.ScreenToWorldPoint(context.ReadValue<Vector2>()) - (Vector2)_arm.transform.position).normalized;
             lookingAngle = CalculateAngle(Camera.main.ScreenToWorldPoint(context.ReadValue<Vector2>()));
         }
 
-        _gun.transform.up = lookingDir;
-        _gun.transform.eulerAngles = new Vector3(_gun.transform.eulerAngles.x, 0, _gun.transform.eulerAngles.z);
+        _arm.transform.up = lookingDir;
+        _arm.transform.eulerAngles = new Vector3(_arm.transform.eulerAngles.x, 0, _arm.transform.eulerAngles.z);
 
-        if (_gun.transform.eulerAngles.z > 0 && _gun.transform.eulerAngles.z < 180)
+        if (_arm.transform.eulerAngles.z > 0 && _arm.transform.eulerAngles.z < 180)
         {
-            _gun.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().flipY = true;
+            _arm.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().flipY = true;
         }
         else
         {
-            _gun.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().flipY = false;
+            _arm.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().flipY = false;
         }
     }
     #endregion
@@ -115,32 +118,34 @@ public class PlayerController : MonoBehaviour
         isFireHeld = false;
     }
 
-    private void FireShot()
+    private void UseItem()
     {
-        Item item = _inventory.inventorySlots[_inventory.slotSelected].GetComponentInChildren<InventoryItem>().item;
-        switch (item)
+        if (_inventoryItem != null)
         {
-            case Gun:
-                Debug.Log("Just shot a gun!");
-                break;
-            case Throwable:
-                Debug.Log("Just threw a throwable!");
-                break;
-            default:
-                break;
-        }
-
-        Camera.main.GetComponent<CameraShake>().ShakeScreen(0.2f);
-        if (_playerInput.currentControlScheme != "Keyboard")
-        {
-            ControllerRumble(0.25f, 0.55f, 0.25f);
+            switch (_inventoryItem.item)
+            {
+                case Gun gun:
+                    Debug.Log("Shot a gun");
+                    useCooldown = gun.fireRate;
+                    Camera.main.GetComponent<CameraShake>().ShakeScreen(0.2f);
+                    if (_playerInput.currentControlScheme != "Keyboard")
+                    {
+                        ControllerRumble(0.25f, 0.55f, 0.25f);
+                    }
+                    break;
+                case Throwable throwable:
+                    Debug.Log("Just threw a throwable!");
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
     private IEnumerator Using()
     {
-        FireShot();
-        yield return new WaitForSeconds(.25f);
+        UseItem();
+        yield return new WaitForSeconds(useCooldown);
         if (isFireHeld)
         {
             _usingCoroutine = StartCoroutine(Using());
@@ -163,7 +168,7 @@ public class PlayerController : MonoBehaviour
         {
             _inventory.slotSelected = _inventory.inventorySlots.Length - 1;
         }
-        _inventory.UpdateSelectPos();
+        Switch();
     }
 
     private void SwitchR(InputAction.CallbackContext context)
@@ -176,7 +181,17 @@ public class PlayerController : MonoBehaviour
         {
             _inventory.slotSelected = 0;
         }
+        Switch();
+    }
+
+    private void Switch()
+    {
         _inventory.UpdateSelectPos();
+        _inventoryItem = _inventory.inventorySlots[_inventory.slotSelected].GetComponentInChildren<InventoryItem>();
+        if (_inventoryItem != null)
+            _arm.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite = _inventoryItem.item.inGameImage;
+        else
+            _arm.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite = null;
     }
     #endregion
 

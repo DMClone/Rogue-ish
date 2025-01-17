@@ -399,7 +399,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 2.5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1018,7 +1018,7 @@ PrefabInstance:
     - target: {fileID: 1120779012566246635, guid: 30f5e7ebf1b52d84483136e10d5b4cd2, type: 3}
       propertyPath: item
       value: 
-      objectReference: {fileID: 11400000, guid: 4e463b822cec5b4419097e251a9255be, type: 2}
+      objectReference: {fileID: 11400000, guid: 1d3565dff234fb94eb95d9944178fb82, type: 2}
     - target: {fileID: 6478676720324422651, guid: 30f5e7ebf1b52d84483136e10d5b4cd2, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.54
@@ -7071,7 +7071,7 @@ PrefabInstance:
     - target: {fileID: 1120779012566246635, guid: 30f5e7ebf1b52d84483136e10d5b4cd2, type: 3}
       propertyPath: item
       value: 
-      objectReference: {fileID: 11400000, guid: 4e463b822cec5b4419097e251a9255be, type: 2}
+      objectReference: {fileID: 11400000, guid: 875bef25f5a72544188e521407535bb0, type: 2}
     - target: {fileID: 6478676720324422651, guid: 30f5e7ebf1b52d84483136e10d5b4cd2, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4.83
@@ -7507,10 +7507,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _droppedItem: {fileID: 7735792086524088925, guid: 30f5e7ebf1b52d84483136e10d5b4cd2, type: 3}
-  _gun: {fileID: 1132021220}
+  _arm: {fileID: 1132021220}
   _spriteRenderer: {fileID: 0}
   _moveDirection: {x: 0, y: 0}
   isFireHeld: 0
+  useCooldown: 0
   lookingAngle: 0
   lookingDir: {x: 0, y: 0}
 --- !u!61 &2009582722

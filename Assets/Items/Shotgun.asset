@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: Shotgun
   m_EditorClassIdentifier: 
   image: {fileID: -762074860, guid: d71a3dc7aa20fad4f9a99fc76a9254ba, type: 3}
+  inGameImage: {fileID: 1772703093, guid: 0d5e657ee5a074e4baa53d5b248a01d2, type: 3}
   isStackable: 0
   isUsable: 1
-  useTime: 1.23
+  gunSound: {fileID: 0}
   useType: 0
   bulletsPerShot: 9
   damagePetBullet: 2
+  fireRate: 1

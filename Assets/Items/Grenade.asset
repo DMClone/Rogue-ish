@@ -13,7 +13,12 @@ MonoBehaviour:
   m_Name: Grenade
   m_EditorClassIdentifier: 
   image: {fileID: -201829820, guid: d71a3dc7aa20fad4f9a99fc76a9254ba, type: 3}
+  inGameImage: {fileID: -201829820, guid: d71a3dc7aa20fad4f9a99fc76a9254ba, type: 3}
   isStackable: 1
   isUsable: 1
+  gunSound: {fileID: 0}
   useType: 1
+  explosionDamage: 0
   explosionRadius: 5
+  throwVelocity: 0
+  cooldown: 0
