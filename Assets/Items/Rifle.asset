@@ -18,6 +18,11 @@ MonoBehaviour:
   isUsable: 1
   gunSound: {fileID: 8300000, guid: 6f0c572d865b4664db7a460972bc4768, type: 3}
   useType: 0
+  bulletPrefab: {fileID: 3924679963682538057, guid: 07745b7402afda84ab65f060c91e2989, type: 3}
   bulletsPerShot: 1
   damagePetBullet: 5
   fireRate: 0.25
+  screenshakeStrength: 0.207
+  rumbleLeft: 0.1
+  rumbleRight: 0.5
+  rumbleDuration: 0.15

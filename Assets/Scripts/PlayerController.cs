@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using NUnit.Framework.Constraints;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Animations;
@@ -14,11 +15,11 @@ public class PlayerController : MonoBehaviour, IShoot
 
     private Inventory _inventory;
     [SerializeField] private GameObject _droppedItem;
-    public GameObject _bulletPrefab { get; set; }
     private InventoryItem _inventoryItem;
     private PlayerInput _playerInput;
     private Rigidbody2D _rigidbody;
     [SerializeField] private GameObject _arm;
+    [SerializeField] private GameObject _barrelExit;
     [SerializeField] private SpriteRenderer _spriteRenderer;
     private Animator _animator;
     public Vector2 _moveDirection;
@@ -63,18 +64,12 @@ public class PlayerController : MonoBehaviour, IShoot
         _spriteRenderer = transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>();
     }
 
-    #region Move/Look
-    private void Move(InputAction.CallbackContext context)
-    {
-        _moveDirection = context.ReadValue<Vector2>();
-        // _animator.ResetTrigger("Todefault");
-    }
+    private void Start() => Switch();
 
-    private void MoveStop(InputAction.CallbackContext context)
-    {
-        _moveDirection = context.ReadValue<Vector2>();
-        // _animator.ResetTrigger("Run");
-    }
+    #region Move/Look
+    private void Move(InputAction.CallbackContext context) => _moveDirection = context.ReadValue<Vector2>();
+
+    private void MoveStop(InputAction.CallbackContext context) => _moveDirection = context.ReadValue<Vector2>();
 
     private void Look(InputAction.CallbackContext context)
     {
@@ -95,10 +90,12 @@ public class PlayerController : MonoBehaviour, IShoot
         if (_arm.transform.eulerAngles.z > 0 && _arm.transform.eulerAngles.z < 180)
         {
             _arm.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().flipY = true;
+            _barrelExit.transform.localPosition = new Vector3(_barrelExit.transform.localPosition.x, -0.11f, _barrelExit.transform.localPosition.z);
         }
         else
         {
             _arm.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().flipY = false;
+            _barrelExit.transform.localPosition = new Vector3(_barrelExit.transform.localPosition.x, 0.11f, _barrelExit.transform.localPosition.z);
         }
     }
     #endregion
@@ -127,11 +124,12 @@ public class PlayerController : MonoBehaviour, IShoot
                 case Gun gun:
                     Debug.Log("Shot a gun");
                     useCooldown = gun.fireRate;
-                    Camera.main.GetComponent<CameraShake>().ShakeScreen(0.2f);
+                    Camera.main.GetComponent<CameraShake>().ShakeScreen(gun.screenshakeStrength);
                     if (_playerInput.currentControlScheme != "Keyboard")
                     {
-                        ControllerRumble(0.25f, 0.55f, 0.25f);
+                        ControllerRumble(gun.rumbleLeft, gun.rumbleRight, gun.rumbleDuration);
                     }
+                    FireShot(lookingDir, gun.bulletsPerShot, gun.bulletPrefab);
                     break;
                 case Throwable throwable:
                     Debug.Log("Just threw a throwable!");
@@ -169,6 +167,7 @@ public class PlayerController : MonoBehaviour, IShoot
             _inventory.slotSelected = _inventory.inventorySlots.Length - 1;
         }
         Switch();
+        _inventory.UpdateSelectPos();
     }
 
     private void SwitchR(InputAction.CallbackContext context)
@@ -182,11 +181,11 @@ public class PlayerController : MonoBehaviour, IShoot
             _inventory.slotSelected = 0;
         }
         Switch();
+        _inventory.UpdateSelectPos();
     }
 
     private void Switch()
     {
-        _inventory.UpdateSelectPos();
         _inventoryItem = _inventory.inventorySlots[_inventory.slotSelected].GetComponentInChildren<InventoryItem>();
         if (_inventoryItem != null)
             _arm.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite = _inventoryItem.item.inGameImage;
@@ -195,19 +194,7 @@ public class PlayerController : MonoBehaviour, IShoot
     }
     #endregion
 
-    private void Drop(InputAction.CallbackContext context)
-    {
-        InventorySlot slot = _inventory.inventorySlots[_inventory.slotSelected];
-        InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
-        if ((itemInSlot != null) && !itemInSlot.item.isStackable)
-        {
-            GameObject droppedItem = Instantiate(_droppedItem, transform.position, Quaternion.identity);
-            droppedItem.GetComponent<DroppedItem>().item = itemInSlot.item;
-            droppedItem.GetComponent<Rigidbody2D>().linearVelocity = lookingDir * 5;
-            Destroy(itemInSlot.gameObject);
-        }
-    }
-
+    #region Updates
     void FixedUpdate()
     {
         _rigidbody.linearVelocity += _moveDirection;
@@ -232,6 +219,21 @@ public class PlayerController : MonoBehaviour, IShoot
             _spriteRenderer.flipX = false;
         }
     }
+    #endregion
+
+    private void Drop(InputAction.CallbackContext context)
+    {
+        InventorySlot slot = _inventory.inventorySlots[_inventory.slotSelected];
+        InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
+        if ((itemInSlot != null) && !itemInSlot.item.isStackable)
+        {
+            GameObject droppedItem = Instantiate(_droppedItem, transform.position, Quaternion.identity);
+            droppedItem.GetComponent<DroppedItem>().item = itemInSlot.item;
+            droppedItem.GetComponent<Rigidbody2D>().linearVelocity = lookingDir * 5;
+            Destroy(itemInSlot.gameObject);
+            _inventory.slotsOccupied--;
+        }
+    }
 
     public float CalculateAngle(Vector2 ownPos)
     {
@@ -254,5 +256,15 @@ public class PlayerController : MonoBehaviour, IShoot
         Gamepad.current.SetMotorSpeeds(lowFreq, highFreq);
         yield return new WaitForSeconds(duration);
         Gamepad.current.SetMotorSpeeds(0, 0);
+    }
+
+    public void FireShot(Vector2 shotDir, int shots, GameObject bulletPrefab)
+    {
+        for (int i = 0; i < shots; i++)
+        {
+            Bullet bullet = Instantiate(bulletPrefab, _barrelExit.transform.position, Quaternion.identity).GetComponent<Bullet>();
+            bullet.direction = lookingDir;
+            bullet.speed = 10;
+        }
     }
 }

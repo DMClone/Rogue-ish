@@ -12,7 +12,9 @@ public class Inventory : MonoBehaviour
     [SerializeField] private Sprite _slotSprite;
     [SerializeField] private GameObject _itemPrefab;
     public int slotSelected = 0;
+    public int draggingSlot; // The slot where the item inside is currently being dragged
     public InventorySlot[] inventorySlots;
+    public int slotsOccupied;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     private void Awake()
@@ -29,32 +31,37 @@ public class Inventory : MonoBehaviour
 
     public bool AddItem(Item item)
     {
-        if (item.isStackable)
+        if (slotsOccupied != inventorySlots.Length)
         {
+            if (item.isStackable)
+            {
+                for (int i = 0; i < inventorySlots.Length; i++)
+                {
+                    InventorySlot slot = inventorySlots[i];
+                    InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
+                    if (itemInSlot != null && itemInSlot.item == item)
+                    {
+                        itemInSlot.count++;
+                        itemInSlot.UpdateCount();
+                        return true;
+                    }
+                }
+            }
+
             for (int i = 0; i < inventorySlots.Length; i++)
             {
                 InventorySlot slot = inventorySlots[i];
                 InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
-                if (itemInSlot != null && itemInSlot.item == item)
+                if (itemInSlot == null)
                 {
-                    itemInSlot.count++;
-                    itemInSlot.UpdateCount();
+                    SpawnNewItem(item, slot);
+                    slotsOccupied++;
                     return true;
                 }
             }
+            return false;
         }
-
-        for (int i = 0; i < inventorySlots.Length; i++)
-        {
-            InventorySlot slot = inventorySlots[i];
-            InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
-            if (itemInSlot == null)
-            {
-                SpawnNewItem(item, slot);
-                return true;
-            }
-        }
-        return false;
+        else { return false; }
     }
 
     void SpawnNewItem(Item item, InventorySlot slot)

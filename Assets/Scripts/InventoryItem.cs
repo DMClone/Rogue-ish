@@ -7,10 +7,16 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 {
     public Image image;
     public Text countText;
+    public Inventory _inventory;
 
     public Transform parentAfterDrag;
     public Item item;
     public int count = 1;
+
+    private void Awake()
+    {
+        _inventory = Inventory.instance;
+    }
 
     private void Start()
     {
@@ -46,6 +52,14 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         transform.SetParent(transform.root);
         transform.SetAsLastSibling();
         image.raycastTarget = false;
+        for (int i = 0; i < _inventory.inventorySlots.Length; i++)
+        {
+            if (_inventory.inventorySlots[i] == parentAfterDrag)
+            {
+                _inventory.draggingSlot = i;
+                return;
+            }
+        }
     }
 
     public void OnDrag(PointerEventData eventData)

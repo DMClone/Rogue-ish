@@ -21,3 +21,7 @@ MonoBehaviour:
   bulletsPerShot: 9
   damagePetBullet: 2
   fireRate: 1
+  screenshakeStrength: 0.432
+  rumbleLeft: 0.4
+  rumbleRight: 0.7
+  rumbleDuration: 0.35
