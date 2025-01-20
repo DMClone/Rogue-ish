@@ -9,8 +9,9 @@ public class Gun : Item
     [Header("Gun specifics")]
     public GameObject bulletPrefab;
     public int bulletsPerShot;
-    public int damagePetBullet;
     public float fireRate;
+    public float spread;
+    public int damagePetBullet;
 
     [Header("Screenshake/Rumble Settings")]
     [Range(0, 1)] public float screenshakeStrength;

@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using NUnit.Framework.Constraints;
 using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Animations;
@@ -129,7 +128,7 @@ public class PlayerController : MonoBehaviour, IShoot
                     {
                         ControllerRumble(gun.rumbleLeft, gun.rumbleRight, gun.rumbleDuration);
                     }
-                    FireShot(lookingDir, gun.bulletsPerShot, gun.bulletPrefab);
+                    FireShot(lookingDir, gun.bulletsPerShot, gun.spread, gun.bulletPrefab);
                     break;
                 case Throwable throwable:
                     Debug.Log("Just threw a throwable!");
@@ -184,7 +183,7 @@ public class PlayerController : MonoBehaviour, IShoot
         _inventory.UpdateSelectPos();
     }
 
-    private void Switch()
+    public void Switch()
     {
         _inventoryItem = _inventory.inventorySlots[_inventory.slotSelected].GetComponentInChildren<InventoryItem>();
         if (_inventoryItem != null)
@@ -258,12 +257,18 @@ public class PlayerController : MonoBehaviour, IShoot
         Gamepad.current.SetMotorSpeeds(0, 0);
     }
 
-    public void FireShot(Vector2 shotDir, int shots, GameObject bulletPrefab)
+    public void FireShot(Vector2 shotDir, int shots, float spread, GameObject bulletPrefab)
     {
         for (int i = 0; i < shots; i++)
         {
+            float randomSpread = UnityEngine.Random.Range(-spread, spread) * Mathf.Deg2Rad;
+            Vector2 bulletDir = new Vector2(
+                Mathf.Cos(randomSpread) * shotDir.x - Mathf.Sin(randomSpread) * shotDir.y,
+                Mathf.Sin(randomSpread) * shotDir.x + Mathf.Cos(randomSpread) * shotDir.y
+            );
+
             Bullet bullet = Instantiate(bulletPrefab, _barrelExit.transform.position, Quaternion.identity).GetComponent<Bullet>();
-            bullet.direction = lookingDir;
+            bullet.direction = bulletDir;
             bullet.speed = 10;
         }
     }

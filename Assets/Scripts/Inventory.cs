@@ -43,6 +43,7 @@ public class Inventory : MonoBehaviour
                     {
                         itemInSlot.count++;
                         itemInSlot.UpdateCount();
+                        PlayerController.instance.Switch();
                         return true;
                     }
                 }
@@ -56,6 +57,7 @@ public class Inventory : MonoBehaviour
                 {
                     SpawnNewItem(item, slot);
                     slotsOccupied++;
+                    PlayerController.instance.Switch();
                     return true;
                 }
             }
