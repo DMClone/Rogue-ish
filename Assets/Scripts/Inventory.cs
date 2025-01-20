@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Microsoft.Unity.VisualStudio.Editor;
 using Unity.VisualScripting.ReorderableList;
 using UnityEngine;
@@ -11,9 +12,10 @@ public class Inventory : MonoBehaviour
     [SerializeField] private GameObject _select;
     [SerializeField] private Sprite _slotSprite;
     [SerializeField] private GameObject _itemPrefab;
+    [SerializeField] private GameObject _slot;
     public int slotSelected = 0;
     public int draggingSlot; // The slot where the item inside is currently being dragged
-    public InventorySlot[] inventorySlots;
+    public List<InventorySlot> inventorySlots;
     public int slotsOccupied;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
@@ -21,7 +23,6 @@ public class Inventory : MonoBehaviour
     {
         if (instance == null)
             instance = this;
-
     }
 
     public void UpdateSelectPos()
@@ -31,11 +32,11 @@ public class Inventory : MonoBehaviour
 
     public bool AddItem(Item item)
     {
-        if (slotsOccupied != inventorySlots.Length)
+        if (slotsOccupied != inventorySlots.Count)
         {
             if (item.isStackable)
             {
-                for (int i = 0; i < inventorySlots.Length; i++)
+                for (int i = 0; i < inventorySlots.Count; i++)
                 {
                     InventorySlot slot = inventorySlots[i];
                     InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
@@ -49,7 +50,7 @@ public class Inventory : MonoBehaviour
                 }
             }
 
-            for (int i = 0; i < inventorySlots.Length; i++)
+            for (int i = 0; i < inventorySlots.Count; i++)
             {
                 InventorySlot slot = inventorySlots[i];
                 InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
@@ -72,5 +73,13 @@ public class Inventory : MonoBehaviour
         newItem.name = item.name;
         InventoryItem inventoryItem = newItem.GetComponent<InventoryItem>();
         inventoryItem.InitialiseItem(item);
+    }
+
+    void AddSlot()
+    {
+        GetComponent<RectTransform>().sizeDelta = new Vector2(25 + 20 * inventorySlots.Count, 30);
+        GameObject slot = Instantiate(_slot, transform);
+        inventorySlots.Add(slot.GetComponent<InventorySlot>());
+        UpdateSelectPos();
     }
 }

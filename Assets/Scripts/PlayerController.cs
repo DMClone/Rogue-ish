@@ -163,7 +163,7 @@ public class PlayerController : MonoBehaviour, IShoot
         }
         else
         {
-            _inventory.slotSelected = _inventory.inventorySlots.Length - 1;
+            _inventory.slotSelected = _inventory.inventorySlots.Count - 1;
         }
         Switch();
         _inventory.UpdateSelectPos();
@@ -171,7 +171,7 @@ public class PlayerController : MonoBehaviour, IShoot
 
     private void SwitchR(InputAction.CallbackContext context)
     {
-        if (_inventory.slotSelected < _inventory.inventorySlots.Length - 1)
+        if (_inventory.slotSelected < _inventory.inventorySlots.Count - 1)
         {
             _inventory.slotSelected++;
         }

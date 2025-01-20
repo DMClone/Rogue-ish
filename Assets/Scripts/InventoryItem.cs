@@ -52,7 +52,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         transform.SetParent(transform.root);
         transform.SetAsLastSibling();
         image.raycastTarget = false;
-        for (int i = 0; i < _inventory.inventorySlots.Length; i++)
+        for (int i = 0; i < _inventory.inventorySlots.Count; i++)
         {
             if (_inventory.inventorySlots[i] == parentAfterDrag)
             {
