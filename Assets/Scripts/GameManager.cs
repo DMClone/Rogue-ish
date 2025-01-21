@@ -12,6 +12,10 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    public int coins;
+
+    public int mobSpawnMult;
+
     private void Awake()
     {
         if (instance == null)

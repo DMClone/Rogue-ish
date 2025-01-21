@@ -27,7 +27,6 @@ public class PlayerController : MonoBehaviour, IShoot
 
     public bool isFireHeld;
     [SerializeField] private float useCooldown;
-    public float lookingAngle;
     public Vector2 lookingDir;
 
     private void Awake()
@@ -74,13 +73,12 @@ public class PlayerController : MonoBehaviour, IShoot
     {
         if (_playerInput.currentControlScheme != "Keyboard" && context.ReadValue<Vector2>() != Vector2.zero)
         {
-            lookingAngle = Vector2.Angle(Vector2.up, context.ReadValue<Vector2>());
             lookingDir = context.ReadValue<Vector2>();
+
         }
         else if (context.ReadValue<Vector2>() != Vector2.zero)
         {
             lookingDir = ((Vector2)Camera.main.ScreenToWorldPoint(context.ReadValue<Vector2>()) - (Vector2)_arm.transform.position).normalized;
-            lookingAngle = CalculateAngle(Camera.main.ScreenToWorldPoint(context.ReadValue<Vector2>()));
         }
 
         _arm.transform.up = lookingDir;
@@ -116,7 +114,7 @@ public class PlayerController : MonoBehaviour, IShoot
 
     private void UseItem()
     {
-        if (_inventoryItem != null)
+        if ((_inventoryItem != null) && _inventoryItem.item.isUsable)
         {
             switch (_inventoryItem.item)
             {

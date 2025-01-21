@@ -1,21 +1,23 @@
 using UnityEngine;
 
-public class WeepingAngel : MonoBehaviour
+public class WeepingAngel : EnemyBase
 {
-    [SerializeField] private float requiredAngel;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
+    [SerializeField] private float requiredAngle;
+    private bool _hasLOS;
 
-    }
-
-    // Update is called once per frame
-    void FixedUpdate()
+    public override void FixedUpdate()
     {
-        float _angle = PlayerController.instance.CalculateAngle(transform.position);
-        if (PlayerController.instance.lookingAngle - _angle <= requiredAngel / 2f && PlayerController.instance.lookingAngle - _angle >= -requiredAngel / 2f)
+        Vector2 directionToEnemy = (transform.position - _playerController.transform.position).normalized;
+
+        float angle = Vector2.SignedAngle(_playerController.lookingDir, directionToEnemy);
+
+        if (Mathf.Abs(angle) <= requiredAngle)
         {
-            Debug.Log("I can smell you");
+            _hasLOS = true;
         }
+        else { _hasLOS = false; }
+
+        if (!_hasLOS) { _rigidbody.linearVelocity += (Vector2)(_playerController.transform.position - transform.position).normalized * movementSpeed; }
+
     }
 }
