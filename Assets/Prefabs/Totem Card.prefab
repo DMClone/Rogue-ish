@@ -160,9 +160,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2654359619751983826}
+  - component: {fileID: 956540463962055462}
   - component: {fileID: 3131662913697208861}
   - component: {fileID: 8222551216028604927}
-  - component: {fileID: 2166344704947829221}
+  - component: {fileID: 7337215697869726898}
   m_Layer: 5
   m_Name: Totem Card
   m_TagString: Untagged
@@ -192,6 +193,36 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &956540463962055462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4312801382021125903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 2100000, guid: 425f0feb13a24f8458b59fc884679932, type: 2}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 0.5
 --- !u!222 &3131662913697208861
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -221,7 +252,7 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -240,12 +271,12 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 6616875871280259391}
+  m_TargetGraphic: {fileID: 956540463962055462}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2166344704947829221}
-        m_TargetAssemblyTypeName: ShopButton, Assembly-CSharp
+      - m_Target: {fileID: 7337215697869726898}
+        m_TargetAssemblyTypeName: TotemShopButton, Assembly-CSharp
         m_MethodName: BuyItem
         m_Mode: 1
         m_Arguments:
@@ -256,7 +287,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &2166344704947829221
+--- !u!114 &7337215697869726898
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -265,11 +296,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4312801382021125903}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7372ba162cab4b94982c04303707e0ae, type: 3}
+  m_Script: {fileID: 11500000, guid: a05cbe3245697154c84d6c01fd514fd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemCost: 25
-  item: {fileID: 11400000, guid: 05ef428189d897a4db1ab4d352d8aad2, type: 2}
+  _itemCost: 0
+  item: {fileID: 11400000, guid: 2e3c396cc263bba4eacdc2b28263f281, type: 2}
 --- !u!1 &5595397038712690680
 GameObject:
   m_ObjectHideFlags: 0
@@ -336,6 +367,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: '+100% damage taken
+
+    more dmg?
+
+    lol
+
+    another lol
 
 '
   m_isRightToLeft: 0

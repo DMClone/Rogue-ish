@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour, IShoot
 
     public bool isFireHeld;
     [SerializeField] private float useCooldown;
-    public Vector2 lookingDir;
+    public Vector2 lookingDir = new Vector2(0, 1);
 
     private void Awake()
     {
@@ -187,9 +187,14 @@ public class PlayerController : MonoBehaviour, IShoot
         if (_inventoryItem != null)
             _arm.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite = _inventoryItem.item.inGameImage;
         else
-            _arm.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite = null;
+            RemoveWeapon();
     }
     #endregion
+
+    private void RemoveWeapon()
+    {
+        _arm.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite = null;
+    }
 
     #region Updates
     void FixedUpdate()
@@ -229,6 +234,7 @@ public class PlayerController : MonoBehaviour, IShoot
             droppedItem.GetComponent<Rigidbody2D>().linearVelocity = lookingDir * 5;
             Destroy(itemInSlot.gameObject);
             _inventory.slotsOccupied--;
+            RemoveWeapon();
         }
     }
 
@@ -266,7 +272,7 @@ public class PlayerController : MonoBehaviour, IShoot
             );
 
             Bullet bullet = Instantiate(bulletPrefab, _barrelExit.transform.position, Quaternion.identity).GetComponent<Bullet>();
-            bullet.direction = bulletDir;
+            bullet.direction = bulletDir.normalized;
             bullet.speed = 10;
         }
     }
