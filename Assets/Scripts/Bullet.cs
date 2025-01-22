@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    public int damage;
+    public bool isPlayerOwned;
     public Vector2 direction;
     public float speed;
     private Rigidbody2D _rigidbody;
@@ -17,9 +19,12 @@ public class Bullet : MonoBehaviour
         _rigidbody.linearVelocity = direction * speed;
     }
 
-    // Update is called once per frame
-    void Update()
+    void OnTriggerEnter2D(Collider2D other)
     {
-
+        if ((other.GetComponent<Health>() != null) && other.GetComponent<Health>().isPlayer != isPlayerOwned)
+        {
+            other.GetComponent<Health>().TakeDamage(damage);
+            Destroy(gameObject);
+        }
     }
 }

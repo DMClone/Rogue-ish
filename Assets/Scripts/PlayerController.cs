@@ -126,7 +126,7 @@ public class PlayerController : MonoBehaviour, IShoot
                     {
                         ControllerRumble(gun.rumbleLeft, gun.rumbleRight, gun.rumbleDuration);
                     }
-                    FireShot(lookingDir, gun.bulletsPerShot, gun.spread, gun.bulletPrefab);
+                    FireShot(gun.damagePetBullet, lookingDir, gun.bulletsPerShot, gun.spread, gun.bulletPrefab);
                     break;
                 case Throwable throwable:
                     Debug.Log("Just threw a throwable!");
@@ -261,7 +261,7 @@ public class PlayerController : MonoBehaviour, IShoot
         Gamepad.current.SetMotorSpeeds(0, 0);
     }
 
-    public void FireShot(Vector2 shotDir, int shots, float spread, GameObject bulletPrefab)
+    public void FireShot(int damage, Vector2 shotDir, int shots, float spread, GameObject bulletPrefab)
     {
         for (int i = 0; i < shots; i++)
         {
@@ -272,6 +272,8 @@ public class PlayerController : MonoBehaviour, IShoot
             );
 
             Bullet bullet = Instantiate(bulletPrefab, _barrelExit.transform.position, Quaternion.identity).GetComponent<Bullet>();
+            bullet.damage = damage;
+            bullet.isPlayerOwned = true;
             bullet.direction = bulletDir.normalized;
             bullet.speed = 10;
         }

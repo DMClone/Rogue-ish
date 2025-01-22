@@ -18,6 +18,20 @@ public class WeepingAngel : EnemyBase
         else { _hasLOS = false; }
 
         if (!_hasLOS) { _rigidbody.linearVelocity += (Vector2)(_playerController.transform.position - transform.position).normalized * movementSpeed; }
+        else { _rigidbody.linearVelocity = Vector2.zero; }
+    }
 
+    private void Update()
+    {
+        FaceVelocity();
+
+        if (_rigidbody.linearVelocity.magnitude != 0)
+        {
+            _animator.SetTrigger("Run");
+        }
+        else
+        {
+            _animator.SetTrigger("Idle");
+        }
     }
 }

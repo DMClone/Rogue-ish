@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
             instance = this;
         }
 
-        StartCoroutine(RoundTimer());
+        // StartCoroutine(RoundTimer());
     }
 
     private void Update()
@@ -71,12 +71,15 @@ public class GameManager : MonoBehaviour
     private void ToggleShop()
     {
         state = GameState.InShop;
-        // PlayerController.instance.gameObject.GetComponent<PlayerInput>().enabled = false;
+        PlayerController.instance.gameObject.GetComponent<PlayerInput>().enabled = false;
+        Shop.instance.MoveShopIn();
     }
 
     private void ToggleGame()
     {
         state = GameState.InGame;
-        // PlayerController.instance.gameObject.GetComponent<PlayerInput>().enabled = true;
+
+        PlayerController.instance.gameObject.GetComponent<PlayerInput>().enabled = true;
+        Shop.instance.MoveShopAway();
     }
 }
