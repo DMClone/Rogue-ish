@@ -19,7 +19,7 @@ public class Bullet : MonoBehaviour
         _rigidbody.linearVelocity = direction * speed;
     }
 
-    private void OnCollisionEnter2D(Collision2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if ((other.gameObject.GetComponent<Health>() != null) && other.gameObject.GetComponent<Health>().isPlayer != isPlayerOwned)
         {

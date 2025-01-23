@@ -13,7 +13,7 @@ public class EnemyBase : MonoBehaviour
     public float movementSpeed;
     protected float _distanceFromPlayer;
 
-    protected void Start()
+    public virtual void Start()
     {
         _playerController = PlayerController.instance;
         _rigidbody = GetComponent<Rigidbody2D>();

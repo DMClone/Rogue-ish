@@ -5,6 +5,12 @@ public class WeepingAngel : EnemyBase
     [SerializeField] private float requiredAngle;
     private bool _hasLOS;
 
+    public override void Start()
+    {
+        base.Start();
+        GetComponent<Health>().ue_died.AddListener(DisableThis);
+    }
+
     public override void FixedUpdate()
     {
         Vector2 directionToEnemy = (transform.position - _playerController.transform.position).normalized;
@@ -38,5 +44,10 @@ public class WeepingAngel : EnemyBase
     private void OnCollisionStay2D(Collision2D other)
     {
 
+    }
+
+    private void DisableThis()
+    {
+        this.enabled = false;
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
 using Unity.Android.Gradle.Manifest;
+using TMPro;
 
 interface IShoot
 {
@@ -25,12 +26,15 @@ public class GameManager : MonoBehaviour
     public UnityEvent ue_sceneClear;
     public UnityEvent ue_sceneReset;
     [SerializeField] private Image _timerMeter;
+    [SerializeField] private TextMeshProUGUI _scoreText;
+    [SerializeField] private TextMeshProUGUI _coinsText;
 
     public GameState state;
     public int[] timerTimes = new int[5] { 50, 20, 50, 20, 100 }; // the amount of seconds between level and shop
     public int _onTime; // on which part we are of the timerTimes
 
     public int coins;
+    public int score;
 
     public int mobSpawnMult = 1;
 
@@ -92,4 +96,13 @@ public class GameManager : MonoBehaviour
         PlayerController.instance.gameObject.GetComponent<PlayerInput>().enabled = true;
         Shop.instance.MoveShopAway();
     }
+
+    public void UpdateScoreAndCoins()
+    {
+        _scoreText.text = score + ":";
+        _coinsText.text = ":" + coins;
+    }
+
+
+
 }
