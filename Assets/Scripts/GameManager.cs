@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using UnityEngine.Events;
+using Unity.Android.Gradle.Manifest;
 
 interface IShoot
 {
@@ -20,6 +22,8 @@ public enum GameState
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
+    public UnityEvent ue_sceneClear;
+    public UnityEvent ue_sceneReset;
     [SerializeField] private Image _timerMeter;
 
     public GameState state;
@@ -33,11 +37,11 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         if (instance == null)
-        {
             instance = this;
-        }
+        if (ue_sceneClear == null)
+            ue_sceneClear = new UnityEvent();
 
-        // StartCoroutine(RoundTimer());
+        StartCoroutine(RoundTimer());
     }
 
     private void Update()
@@ -53,6 +57,7 @@ public class GameManager : MonoBehaviour
             case 0:
             case 2:
                 ToggleShop();
+                ue_sceneClear.Invoke();
                 break;
             case 1:
             case 3:
@@ -66,6 +71,11 @@ public class GameManager : MonoBehaviour
         }
         _onTime++;
         if (_onTime != timerTimes.Length) { StartCoroutine(RoundTimer()); }
+    }
+
+    private void SceneClear()
+    {
+
     }
 
     private void ToggleShop()

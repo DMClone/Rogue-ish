@@ -34,4 +34,9 @@ public class WeepingAngel : EnemyBase
             _animator.SetTrigger("Idle");
         }
     }
+
+    private void OnCollisionStay2D(Collision2D other)
+    {
+
+    }
 }

@@ -21,12 +21,12 @@ public class PlayerController : MonoBehaviour, IShoot
     [SerializeField] private GameObject _barrelExit;
     [SerializeField] private SpriteRenderer _spriteRenderer;
     private Animator _animator;
-    public Vector2 _moveDirection;
-    private Coroutine _usingCoroutine;
-    private Coroutine _rumbleCoroutine;
+    public Vector2 moveDirection;
+    private Coroutine _c_usingCoroutine;
+    private Coroutine _c_rumbleCoroutine;
 
     public bool isFireHeld;
-    [SerializeField] private float useCooldown;
+    [SerializeField] private float _useCooldown;
     public Vector2 lookingDir = new Vector2(0, 1);
 
     private void Awake()
@@ -62,12 +62,19 @@ public class PlayerController : MonoBehaviour, IShoot
         _spriteRenderer = transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>();
     }
 
-    private void Start() => Switch();
+    private void Start()
+    {
+        GameManager.instance.ue_sceneClear.AddListener(RemoveFromScene);
+
+        Switch();
+    }
+
+    protected void RemoveFromScene() => transform.position = Vector2.zero;
 
     #region Move/Look
-    private void Move(InputAction.CallbackContext context) => _moveDirection = context.ReadValue<Vector2>();
+    private void Move(InputAction.CallbackContext context) => moveDirection = context.ReadValue<Vector2>();
 
-    private void MoveStop(InputAction.CallbackContext context) => _moveDirection = context.ReadValue<Vector2>();
+    private void MoveStop(InputAction.CallbackContext context) => moveDirection = context.ReadValue<Vector2>();
 
     private void Look(InputAction.CallbackContext context)
     {
@@ -101,9 +108,9 @@ public class PlayerController : MonoBehaviour, IShoot
     private void Use(InputAction.CallbackContext context)
     {
         isFireHeld = true;
-        if (_usingCoroutine == null)
+        if (_c_usingCoroutine == null)
         {
-            _usingCoroutine = StartCoroutine(Using());
+            _c_usingCoroutine = StartCoroutine(Using());
         }
     }
 
@@ -120,7 +127,7 @@ public class PlayerController : MonoBehaviour, IShoot
             {
                 case Gun gun:
                     Debug.Log("Shot a gun");
-                    useCooldown = gun.fireRate;
+                    _useCooldown = gun.fireRate;
                     Camera.main.GetComponent<CameraShake>().ShakeScreen(gun.screenshakeStrength);
                     if (_playerInput.currentControlScheme != "Keyboard")
                     {
@@ -140,14 +147,14 @@ public class PlayerController : MonoBehaviour, IShoot
     private IEnumerator Using()
     {
         UseItem();
-        yield return new WaitForSeconds(useCooldown);
+        yield return new WaitForSeconds(_useCooldown);
         if (isFireHeld)
         {
-            _usingCoroutine = StartCoroutine(Using());
+            _c_usingCoroutine = StartCoroutine(Using());
         }
         else
         {
-            _usingCoroutine = null;
+            _c_usingCoroutine = null;
         }
     }
     #endregion
@@ -199,7 +206,7 @@ public class PlayerController : MonoBehaviour, IShoot
     #region Updates
     void FixedUpdate()
     {
-        _rigidbody.linearVelocity += _moveDirection;
+        _rigidbody.linearVelocity += moveDirection;
     }
 
     void Update()
@@ -247,11 +254,11 @@ public class PlayerController : MonoBehaviour, IShoot
 
     public void ControllerRumble(float lowFreq, float highFreq, float duration)
     {
-        if (_rumbleCoroutine != null)
+        if (_c_rumbleCoroutine != null)
         {
-            StopCoroutine(_rumbleCoroutine);
+            StopCoroutine(_c_rumbleCoroutine);
         }
-        _rumbleCoroutine = StartCoroutine(Rumble(lowFreq, highFreq, duration));
+        _c_rumbleCoroutine = StartCoroutine(Rumble(lowFreq, highFreq, duration));
     }
 
     private IEnumerator Rumble(float lowFreq, float highFreq, float duration)

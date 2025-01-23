@@ -7,6 +7,9 @@ public class EnemyBase : MonoBehaviour
     [SerializeField] protected SpriteRenderer _spriteRenderer;
     [SerializeField] protected Animator _animator;
 
+    [SerializeField] protected int _damage;
+    [SerializeField] protected float _attackCooldown;
+    protected Coroutine _c_attack;
     public float movementSpeed;
     protected float _distanceFromPlayer;
 
@@ -14,7 +17,10 @@ public class EnemyBase : MonoBehaviour
     {
         _playerController = PlayerController.instance;
         _rigidbody = GetComponent<Rigidbody2D>();
+        GameManager.instance.ue_sceneClear.AddListener(RemoveFromScene);
     }
+
+    protected void RemoveFromScene() => Destroy(gameObject);
 
     public virtual void FixedUpdate()
     {
@@ -38,4 +44,8 @@ public class EnemyBase : MonoBehaviour
         _distanceFromPlayer = Vector2.Distance(_playerController.transform.position, transform.position);
     }
 
+    protected void CollisionDamage(Health health)
+    {
+        health.TakeDamage(_damage);
+    }
 }
