@@ -20,6 +20,6 @@ public class Shop : MonoBehaviour
 
     public void MoveShopAway()
     {
-        transform.DOLocalMoveY(155, 1);
+        transform.DOLocalMoveY(250, 1);
     }
 }
