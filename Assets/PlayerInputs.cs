@@ -55,6 +55,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""Switch"",
+                    ""type"": ""Button"",
+                    ""id"": ""812e8a58-c9b5-4ac3-9704-9f5f49b45d41"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""SwitchLeft"",
                     ""type"": ""Button"",
                     ""id"": ""50488c35-832c-46f5-aaea-fb1eed506fb2"",
@@ -302,6 +311,28 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""action"": ""Drop"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""38c7031e-12c9-4fb7-b2dd-f4126cbff021"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard"",
+                    ""action"": ""Switch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""751a7910-7f8e-402e-98d5-540103c15faf"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Controller"",
+                    ""action"": ""Switch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -346,6 +377,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Use = m_Player.FindAction("Use", throwIfNotFound: true);
+        m_Player_Switch = m_Player.FindAction("Switch", throwIfNotFound: true);
         m_Player_SwitchLeft = m_Player.FindAction("SwitchLeft", throwIfNotFound: true);
         m_Player_SwitchRight = m_Player.FindAction("SwitchRight", throwIfNotFound: true);
         m_Player_Drop = m_Player.FindAction("Drop", throwIfNotFound: true);
@@ -418,6 +450,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Use;
+    private readonly InputAction m_Player_Switch;
     private readonly InputAction m_Player_SwitchLeft;
     private readonly InputAction m_Player_SwitchRight;
     private readonly InputAction m_Player_Drop;
@@ -428,6 +461,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @Use => m_Wrapper.m_Player_Use;
+        public InputAction @Switch => m_Wrapper.m_Player_Switch;
         public InputAction @SwitchLeft => m_Wrapper.m_Player_SwitchLeft;
         public InputAction @SwitchRight => m_Wrapper.m_Player_SwitchRight;
         public InputAction @Drop => m_Wrapper.m_Player_Drop;
@@ -449,6 +483,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Use.started += instance.OnUse;
             @Use.performed += instance.OnUse;
             @Use.canceled += instance.OnUse;
+            @Switch.started += instance.OnSwitch;
+            @Switch.performed += instance.OnSwitch;
+            @Switch.canceled += instance.OnSwitch;
             @SwitchLeft.started += instance.OnSwitchLeft;
             @SwitchLeft.performed += instance.OnSwitchLeft;
             @SwitchLeft.canceled += instance.OnSwitchLeft;
@@ -471,6 +508,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Use.started -= instance.OnUse;
             @Use.performed -= instance.OnUse;
             @Use.canceled -= instance.OnUse;
+            @Switch.started -= instance.OnSwitch;
+            @Switch.performed -= instance.OnSwitch;
+            @Switch.canceled -= instance.OnSwitch;
             @SwitchLeft.started -= instance.OnSwitchLeft;
             @SwitchLeft.performed -= instance.OnSwitchLeft;
             @SwitchLeft.canceled -= instance.OnSwitchLeft;
@@ -520,6 +560,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
         void OnUse(InputAction.CallbackContext context);
+        void OnSwitch(InputAction.CallbackContext context);
         void OnSwitchLeft(InputAction.CallbackContext context);
         void OnSwitchRight(InputAction.CallbackContext context);
         void OnDrop(InputAction.CallbackContext context);

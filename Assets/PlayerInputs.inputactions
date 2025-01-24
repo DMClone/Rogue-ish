@@ -33,6 +33,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Switch",
+                    "type": "Button",
+                    "id": "812e8a58-c9b5-4ac3-9704-9f5f49b45d41",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "SwitchLeft",
                     "type": "Button",
                     "id": "50488c35-832c-46f5-aaea-fb1eed506fb2",
@@ -278,6 +287,28 @@
                     "processors": "",
                     "groups": ";Controller",
                     "action": "Drop",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "38c7031e-12c9-4fb7-b2dd-f4126cbff021",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard",
+                    "action": "Switch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "751a7910-7f8e-402e-98d5-540103c15faf",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Controller",
+                    "action": "Switch",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

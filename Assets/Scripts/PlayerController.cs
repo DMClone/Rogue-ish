@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour, IShoot
     private Inventory _inventory;
     [SerializeField] private GameObject _droppedItem;
     private InventoryItem _inventoryItem;
+    [SerializeField] private GameObject _swapSelector;
+
     private PlayerInput _playerInput;
     private Rigidbody2D _rigidbody;
     [SerializeField] private GameObject _arm;
@@ -31,10 +33,8 @@ public class PlayerController : MonoBehaviour, IShoot
 
     private void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
+        if (instance == null) instance = this;
+
 
         _inventory = Inventory.instance;
         _playerInput = GetComponent<PlayerInput>();
@@ -50,6 +50,8 @@ public class PlayerController : MonoBehaviour, IShoot
         InputAction _playerUse = InputSystem.actions.FindAction("Use");
         _playerUse.performed += Use;
         _playerUse.canceled += UseRelease;
+        InputAction _playerSwitch = InputSystem.actions.FindAction("Switch");
+        _playerSwitch.performed += Switch;
         InputAction _playerSwitchL = InputSystem.actions.FindAction("SwitchLeft");
         _playerSwitchL.performed += SwitchL;
         InputAction _playerSwitchR = InputSystem.actions.FindAction("SwitchRight");
@@ -65,8 +67,7 @@ public class PlayerController : MonoBehaviour, IShoot
     private void Start()
     {
         GameManager.instance.ue_sceneClear.AddListener(RemoveFromScene);
-
-        Switch();
+        SwitchItem();
     }
 
     protected void RemoveFromScene() => transform.position = Vector2.zero;
@@ -160,6 +161,22 @@ public class PlayerController : MonoBehaviour, IShoot
     #endregion
 
     #region Switching
+    private void Switch(InputAction.CallbackContext context)
+    {
+        if (SwapSelection.instance == null)
+        {
+            SwapSelection swapSelection =
+            Instantiate(_swapSelector, _inventory.inventorySlots[_inventory.slotSelected].transform.position, quaternion.identity, _inventory.transform.parent).GetComponent<SwapSelection>();
+            swapSelection.selectedSlot = _inventory.slotSelected;
+        }
+        else
+        {
+            _inventory.inventorySlots[_inventory.slotSelected].transform.GetChild(0).SetParent(_inventory.inventorySlots[SwapSelection.instance.selectedSlot].transform);
+            _inventory.inventorySlots[SwapSelection.instance.selectedSlot].transform.GetChild(0).SetParent(_inventory.inventorySlots[_inventory.slotSelected].transform);
+            Destroy(SwapSelection.instance.gameObject);
+        }
+    }
+
     private void SwitchL(InputAction.CallbackContext context)
     {
         if (_inventory.slotSelected > 0)
@@ -170,7 +187,7 @@ public class PlayerController : MonoBehaviour, IShoot
         {
             _inventory.slotSelected = _inventory.inventorySlots.Count - 1;
         }
-        Switch();
+        SwitchItem();
         _inventory.UpdateSelectPos();
     }
 
@@ -184,11 +201,11 @@ public class PlayerController : MonoBehaviour, IShoot
         {
             _inventory.slotSelected = 0;
         }
-        Switch();
+        SwitchItem();
         _inventory.UpdateSelectPos();
     }
 
-    public void Switch()
+    public void SwitchItem()
     {
         _inventoryItem = _inventory.inventorySlots[_inventory.slotSelected].GetComponentInChildren<InventoryItem>();
         if (_inventoryItem != null)

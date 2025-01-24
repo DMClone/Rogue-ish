@@ -31,6 +31,7 @@ public class Inventory : MonoBehaviour
     public void UpdateSelectPos()
     {
         _select.transform.position = inventorySlots[slotSelected].transform.position;
+        if (SwapSelection.instance != null) SwapSelection.instance.transform.position = inventorySlots[SwapSelection.instance.selectedSlot].transform.position;
     }
 
     public bool AddItem(Item item)
@@ -47,7 +48,7 @@ public class Inventory : MonoBehaviour
                     {
                         itemInSlot.count++;
                         itemInSlot.UpdateCount();
-                        PlayerController.instance.Switch();
+                        PlayerController.instance.SwitchItem();
                         return true;
                     }
                 }
@@ -61,7 +62,7 @@ public class Inventory : MonoBehaviour
                 {
                     SpawnNewItem(item, slot);
                     slotsOccupied++;
-                    PlayerController.instance.Switch();
+                    PlayerController.instance.SwitchItem();
                     return true;
                 }
             }
