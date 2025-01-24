@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Unity.VisualStudio.Editor;
 using Unity.VisualScripting.ReorderableList;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
@@ -13,6 +14,8 @@ public class Inventory : MonoBehaviour
     [SerializeField] private Sprite _slotSprite;
     [SerializeField] private GameObject _itemPrefab;
     [SerializeField] private GameObject _slot;
+    [SerializeField] private GameObject _score;
+    [SerializeField] private GameObject _coins;
     public int slotSelected = 0;
     public int draggingSlot; // The slot where the item inside is currently being dragged
     public List<InventorySlot> inventorySlots;
@@ -75,11 +78,12 @@ public class Inventory : MonoBehaviour
         inventoryItem.InitialiseItem(item);
     }
 
-    void AddSlot()
+    public void SlotsAdded()
     {
-        GetComponent<RectTransform>().sizeDelta = new Vector2(25 + 20 * inventorySlots.Count, 30);
-        GameObject slot = Instantiate(_slot, transform);
-        inventorySlots.Add(slot.GetComponent<InventorySlot>());
+        GetComponent<RectTransform>().sizeDelta = new Vector2(15 + 20 * inventorySlots.Count, 30);
         UpdateSelectPos();
+        _score.GetComponent<RectTransform>().localPosition = new Vector2(30 + -10 * inventorySlots.Count, _score.GetComponent<RectTransform>().localPosition.y);
+        _coins.GetComponent<RectTransform>().localPosition = new Vector2(-30 + 10 * inventorySlots.Count, _coins.GetComponent<RectTransform>().localPosition.y);
     }
 }
+

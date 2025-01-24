@@ -234,9 +234,10 @@ public class PlayerController : MonoBehaviour, IShoot
     {
         InventorySlot slot = _inventory.inventorySlots[_inventory.slotSelected];
         InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
-        if ((itemInSlot != null) && !itemInSlot.item.isStackable)
+        if ((itemInSlot != null) && !itemInSlot.item.isStackable && itemInSlot.item.isUsable)
         {
             GameObject droppedItem = Instantiate(_droppedItem, transform.position, Quaternion.identity);
+            droppedItem.GetComponent<DroppedItem>()._isPlayerInCollider = true;
             droppedItem.GetComponent<DroppedItem>().item = itemInSlot.item;
             droppedItem.GetComponent<Rigidbody2D>().linearVelocity = lookingDir * 5;
             Destroy(itemInSlot.gameObject);

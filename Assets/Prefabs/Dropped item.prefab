@@ -135,8 +135,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spriteRenderer: {fileID: 7797198448273891264}
-  item: {fileID: 0}
-  _isPlayerInCollider: 1
+  item: {fileID: 11400000, guid: 05ef428189d897a4db1ab4d352d8aad2, type: 2}
+  _isPlayerInCollider: 0
 --- !u!61 &512992372402482255
 BoxCollider2D:
   m_ObjectHideFlags: 0

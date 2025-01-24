@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 229ea20cfdbd03a41bc73281bc6ffe82, type: 3}
-  m_Name: HerdTotem
+  m_Script: {fileID: 11500000, guid: 72a53f6d7ecf906429d72052add2bcbe, type: 3}
+  m_Name: Size
   m_EditorClassIdentifier: 
-  image: {fileID: 891942287, guid: d71a3dc7aa20fad4f9a99fc76a9254ba, type: 3}
+  image: {fileID: -38345435, guid: 0d5e657ee5a074e4baa53d5b248a01d2, type: 3}
   inGameImage: {fileID: 0}
   isStackable: 0
   isUsable: 0
-  mobIncrease: 100
+  slotsAdded: 3
